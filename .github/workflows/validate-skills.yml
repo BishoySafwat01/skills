@@ -1,0 +1,81 @@
+name: Validate Agent Skills
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml
+
+      - name: Validate Skills Frontmatter and Directory Layout
+        run: |
+          python - << 'EOF'
+          import sys
+          import pathlib
+          import yaml
+
+          errors = []
+          repo_root = pathlib.Path(".")
+          skills = list(repo_root.glob("**/SKILL.md"))
+
+          if not skills:
+              print("No SKILL.md files found!")
+              sys.exit(1)
+
+          print(f"Found {len(skills)} skill(s) to validate.")
+
+          for skill_path in skills:
+              content = skill_path.read_text(encoding="utf-8")
+              if not content.startswith("---"):
+                  errors.append(f"{skill_path}: Missing YAML frontmatter start ('---')")
+                  continue
+
+              parts = content.split("---", 2)
+              if len(parts) < 3:
+                  errors.append(f"{skill_path}: Invalid YAML frontmatter structure")
+                  continue
+
+              try:
+                  meta = yaml.safe_load(parts[1])
+              except yaml.YAMLError as exc:
+                  errors.append(f"{skill_path}: YAML parse error: {exc}")
+                  continue
+
+              if not isinstance(meta, dict):
+                  errors.append(f"{skill_path}: YAML frontmatter is not a mapping")
+                  continue
+
+              if "name" not in meta or not meta["name"]:
+                  errors.append(f"{skill_path}: Missing required 'name' in frontmatter")
+              if "description" not in meta or not meta["description"]:
+                  errors.append(f"{skill_path}: Missing required 'description' in frontmatter")
+
+              # Validate package layout
+              parent = skill_path.parent
+              if not (parent / "README.md").exists():
+                  errors.append(f"{parent}: Missing companion README.md")
+
+          if errors:
+              print("\nValidation failed with errors:")
+              for err in errors:
+                  print(f"  - {err}")
+              sys.exit(1)
+
+          print("\nAll skills passed specification validation successfully.")
+          EOF

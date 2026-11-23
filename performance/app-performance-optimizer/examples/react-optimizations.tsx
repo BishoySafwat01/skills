@@ -86,7 +86,7 @@ export function OptimisticLikeButton({ itemId, initialLiked, initialCount, onPer
         isLiked ? 'bg-rose-600 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
       }`}
     >
-      <span>{isLiked ? '❤️' : '🤍'}</span> {count}
+      <span>{isLiked ? '[x]' : '[ ]'}</span> {count}
     </button>
   );
 }

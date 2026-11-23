@@ -8,7 +8,7 @@ A curated, enterprise-grade collection of **Agent Skills** designed for autonomo
 
 ---
 
-## 🏛️ Repository Architecture
+## Repository Architecture
 
 This repository organizes skills hierarchically by **Category / Domain**, housing self-contained skill packages:
 
@@ -36,15 +36,16 @@ skills/
 
 ---
 
-## 📚 Skills Catalog
+## Skills Catalog
 
 | Category | Skill Name | Description | Key Capabilities |
 |---|---|---|---|
 | **`performance/`** | [`app-performance-optimizer`](performance/app-performance-optimizer) | Full-stack performance engineering covering the **31 production levers**. | WebP/AVIF, Skeletons, Virtualization, Dedup, Debounce, Redis, Indexes, N+1 fixes, OTel, RUM |
+| **`quality/`** | [`codebase-bloat-auditor`](quality/codebase-bloat-auditor) | Codebase bloat detection, architectural safety verification, and static analysis. | Duplication check, dead code removal, cyclomatic complexity, AST safety scan, Go/No-Go gates |
 
 ---
 
-## 🚀 How to Use These Skills
+## How to Use These Skills
 
 ### 1. In Claude Code
 Clone or link the repository to your skills directory:
@@ -83,7 +84,7 @@ Deliverables:
 
 ---
 
-## 📐 The Anatomy of a High-Quality Skill
+## The Anatomy of a High-Quality Skill
 
 Every skill in this collection adheres to strict design criteria:
 1. **Lightweight Discovery:** Clean YAML frontmatter (`name`, `description`, `triggers`, `metadata`) for token-efficient agent loading.
@@ -93,12 +94,12 @@ Every skill in this collection adheres to strict design criteria:
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 We welcome additions of new skills adhering to our standards! Please consult [`CONTRIBUTING.md`](CONTRIBUTING.md) for details on the validation schema, directory layout, and review guidelines.
 
 ---
 
-## 📄 License
+## License
 
 This repository is licensed under the [MIT License](LICENSE).
